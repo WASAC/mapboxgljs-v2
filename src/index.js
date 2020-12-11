@@ -37,7 +37,6 @@ $(function(){
     this.map.addControl(new MapboxPitchToggleControl({minpitchzoom: 19})); 
     MapboxStyleSwitcherControl.DEFAULT_STYLE = config.styles[0].title;
     this.map.addControl(new MapboxStyleSwitcherControl(config.styles), 'top-right');
-    this.map.addControl(new MapboxAreaSwitcherControl(config.areaSwitcher.areas), 'top-right');
     this.map.addControl(new RulerControl(), 'top-right');
     this.map.addControl(new MapboxExportControl(), 'top-right');
     this.map.addControl(new mapboxgl.ScaleControl({maxWidth: 80, unit: 'metric'}), 'bottom-left');
@@ -89,6 +88,7 @@ $(function(){
                 }),
                 'top-left'
             );
+            this.map.addControl(new MapboxAreaSwitcherControl(config.areaSwitcher.areas), 'top-left');
         });
     }
 })

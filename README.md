@@ -5,6 +5,10 @@
 
 This is the template of Mapbox GL JS implementation for Water Services Providers.
 
+This repository is using `Mapbox GL JS v2` which became proprietary license now. It is just under `experimental` for using our own terrain RGB raster tilesets.
+
+![demo.gif](./demo.gif)
+
 ## Installation
 
 ```
@@ -129,10 +133,10 @@ When you use printed map, please includes attribution as follows.
 
 If you can include HTML, use this code snippet that includes links to Mapbox & OpenStreetMap:
 ```html
-© NARWASSCO, Ltd. © <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>Powered by the United Nations Vector Tile Toolkit
+© WASAC, Ltd. © <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>Powered by the United Nations Vector Tile Toolkit
 ```
 
 For print output or if you can’t include links, use this text-only attribution:
 ```
-© NARWASSCO, Ltd. ©Mapbox ©OpenStreetMap contributors, Powered by the United Nations Vector Tile Toolkit
+© WASAC, Ltd. ©Mapbox ©OpenStreetMap contributors, Powered by the United Nations Vector Tile Toolkit
 ```
