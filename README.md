@@ -1,6 +1,6 @@
 # mapboxgljs-boilerplate
-![](https://github.com/watergis/mapboxgljs-boilerplate/workflows/Node.js%20CI/badge.svg)
-![GitHub](https://img.shields.io/github/license/watergis/mapboxgljs-boilerplate)
+![Node.js CI](https://github.com/WASAC/mapboxgljs-v2/workflows/Node.js%20CI/badge.svg)
+![GitHub](https://img.shields.io/github/license/WASAC/mapboxgljs-v2)
 [![Gitter](https://badges.gitter.im/narwassco/community.svg)](https://gitter.im/narwassco/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 This is the template of Mapbox GL JS implementation for Water Services Providers.
