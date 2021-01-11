@@ -15,14 +15,16 @@ import MapboxAreaSwitcherControl from '@watergis/mapbox-gl-area-switcher';
 import '@watergis/mapbox-gl-area-switcher/css/styles.css';
 import MapboxLegendControl from "@watergis/mapbox-gl-legend";
 import '@watergis/mapbox-gl-legend/css/styles.css';
-import MapboxExportControl from "@watergis/mapbox-gl-export";
+import { MapboxExportControl } from "@watergis/mapbox-gl-export";
 import '@watergis/mapbox-gl-export/css/styles.css';
+import MapboxElevationControl from "@watergis/mapbox-gl-elevation";
+import '@watergis/mapbox-gl-elevation/css/styles.css';
 import config from './config';
 
 $(function(){
     mapboxgl.accessToken = config.accessToken;
 
-    this.map = new mapboxgl.Map({
+    const map = new mapboxgl.Map({
         container: 'map',
         style: config.styles[0].uri,
         center: config.center,
@@ -31,28 +33,22 @@ $(function(){
         attributionControl: false,
     });
 
-    this.map.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
-    this.map.addControl(new CompassControl(), 'top-right');
-    this.map.addControl(new mapboxgl.GeolocateControl({positionOptions: {enableHighAccuracy: true},trackUserLocation: true}), 'top-right');
-    this.map.addControl(new MapboxPitchToggleControl({minpitchzoom: 19})); 
+    map.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
+    map.addControl(new CompassControl(), 'top-right');
+    map.addControl(new mapboxgl.GeolocateControl({positionOptions: {enableHighAccuracy: true},trackUserLocation: true}), 'top-right');
+    map.addControl(new MapboxPitchToggleControl({minpitchzoom: 19})); 
     MapboxStyleSwitcherControl.DEFAULT_STYLE = config.styles[0].title;
-    this.map.addControl(new MapboxStyleSwitcherControl(config.styles), 'top-right');
-    this.map.addControl(new RulerControl(), 'top-right');
-    this.map.addControl(new MapboxExportControl(), 'top-right');
-    this.map.addControl(new mapboxgl.ScaleControl({maxWidth: 80, unit: 'metric'}), 'bottom-left');
-    this.map.addControl(new mapboxgl.AttributionControl({compact: true,customAttribution: config.attribution}), 'bottom-right');
-    if (config.popup)this.map.addControl(new MapboxPopupControl(config.popup.target));
+    map.addControl(new MapboxStyleSwitcherControl(config.styles), 'top-right');
+    map.addControl(new RulerControl(), 'top-right');
+    map.addControl(new MapboxElevationControl(config.elevation.url, config.elevation.options), 'top-right');
+    map.addControl(new MapboxExportControl(), 'top-right');
+    map.addControl(new mapboxgl.ScaleControl({maxWidth: 80, unit: 'metric'}), 'bottom-left');
+    map.addControl(new mapboxgl.AttributionControl({compact: true,customAttribution: config.attribution}), 'bottom-right');
+    if (config.popup)map.addControl(new MapboxPopupControl(config.popup.target));
     let legendCtrl;
     if (config.legend){
-        var map_ = this.map;
-        map_.on('styledata', function() {
-            if(legendCtrl){
-                map_.removeControl(legendCtrl);
-                legendCtrl = null;
-            }
-            legendCtrl = new MapboxLegendControl(config.legend.targets, {showDefault: false});
-            map_.addControl(legendCtrl, 'bottom-left')
-        });
+        legendCtrl = new MapboxLegendControl(config.legend.targets, config.legend.options);
+        map.addControl(legendCtrl, 'bottom-left')
     }
 
     if (config.search){
@@ -77,7 +73,7 @@ $(function(){
                 }
                 return matchingFeatures;
             }
-            this.map.addControl(
+            map.addControl(
                 new MapboxGeocoder({
                     accessToken: mapboxgl.accessToken,
                     localGeocoder: forwardGeocoder,
@@ -88,7 +84,41 @@ $(function(){
                 }),
                 'top-left'
             );
-            this.map.addControl(new MapboxAreaSwitcherControl(config.areaSwitcher.areas), 'top-left');
+            map.addControl(new MapboxAreaSwitcherControl(config.areaSwitcher.areas), 'top-left');
         });
-    }
+    };
+
+    //set feature-state for WSS
+    let hoverLayers = ['wss', 'pipeline', 'watersource'];
+    let hoveredWssId;
+    map.on('mousemove', 'wss', function(e) {
+        if (e.features.length > 0) {
+        if (hoveredWssId) {
+            hoverLayers.forEach(layer=>{
+                map.setFeatureState(
+                    { source: 'assets', sourceLayer: layer, id: hoveredWssId },
+                    { hover: false }
+                );
+            })
+        }
+        hoveredWssId = e.features[0].id;
+        hoverLayers.forEach(layer=>{
+            map.setFeatureState(
+                { source: 'assets', sourceLayer: layer, id: hoveredWssId },
+                { hover: true }
+            );
+        })
+        }
+    });
+    map.on('mouseleave', 'wss', function() {
+        if (hoveredWssId) {
+            hoverLayers.forEach(layer=>{
+                map.setFeatureState(
+                    { source: 'assets', sourceLayer: layer, id: hoveredWssId },
+                    { hover: false }
+                );
+            })
+        }
+        hoveredWssId = null;
+    });
 })
