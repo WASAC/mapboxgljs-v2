@@ -5,9 +5,6 @@ const Dotenv = require('dotenv-webpack');
 module.exports = {
     entry: './src/index.js',
     plugins: [
-        new webpack.ProvidePlugin({
-            Promise: 'es6-promise',
-        }),
         new Dotenv()
     ],
     output: {
