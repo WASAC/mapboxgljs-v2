@@ -1,27 +1,25 @@
-import $ from 'jquery';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css';
-import RulerControl from 'mapbox-gl-controls/lib/ruler';
-import CompassControl from 'mapbox-gl-controls/lib/compass';
-import { MapboxStyleSwitcherControl } from "mapbox-gl-style-switcher";
-import "mapbox-gl-style-switcher/styles.css"
+import { MapboxStyleSwitcherControl } from "@watergis/mapbox-gl-style-switcher";
+import "@watergis/mapbox-gl-style-switcher/styles.css"
 import MapboxPopupControl from '@watergis/mapbox-gl-popup';
 import '@watergis/mapbox-gl-popup/css/styles.css';
 import MapboxPitchToggleControl from '@watergis/mapbox-gl-pitch-toggle-control';
 import '@watergis/mapbox-gl-pitch-toggle-control/css/styles.css';
-import MapboxAreaSwitcherControl from '@watergis/mapbox-gl-area-switcher';
-import '@watergis/mapbox-gl-area-switcher/css/styles.css';
 import MapboxLegendControl from "@watergis/mapbox-gl-legend";
 import '@watergis/mapbox-gl-legend/css/styles.css';
 import { MapboxExportControl } from "@watergis/mapbox-gl-export";
 import '@watergis/mapbox-gl-export/css/styles.css';
 import MapboxElevationControl from "@watergis/mapbox-gl-elevation";
 import '@watergis/mapbox-gl-elevation/css/styles.css';
+import MapboxAdminBoundaryControl from "@wasac/mapbox-gl-admin-boundary";
+import "@wasac/mapbox-gl-admin-boundary/css/styles.css";
+import axios from 'axios';
 import config from './config';
 
-$(function(){
+(()=>{
     mapboxgl.accessToken = config.accessToken;
 
     const map = new mapboxgl.Map({
@@ -33,13 +31,11 @@ $(function(){
         attributionControl: false,
     });
 
-    map.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
-    map.addControl(new CompassControl(), 'top-right');
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
     map.addControl(new mapboxgl.GeolocateControl({positionOptions: {enableHighAccuracy: true},trackUserLocation: true}), 'top-right');
     map.addControl(new MapboxPitchToggleControl({minpitchzoom: 19})); 
     MapboxStyleSwitcherControl.DEFAULT_STYLE = config.styles[0].title;
     map.addControl(new MapboxStyleSwitcherControl(config.styles), 'top-right');
-    map.addControl(new RulerControl(), 'top-right');
     map.addControl(new MapboxElevationControl(config.elevation.url, config.elevation.options), 'top-right');
     map.addControl(new MapboxExportControl(), 'top-right');
     map.addControl(new mapboxgl.ScaleControl({maxWidth: 80, unit: 'metric'}), 'bottom-left');
@@ -52,7 +48,9 @@ $(function(){
     }
 
     if (config.search){
-        $.getJSON(config.search.url , customerData =>{
+        axios.get(config.search.url)
+        .then(res=>{
+            const customerData = res.data;
             function forwardGeocoder(query) {
                 var matchingFeatures = [];
                 for (var i = 0; i < customerData.features.length; i++) {
@@ -84,7 +82,7 @@ $(function(){
                 }),
                 'top-left'
             );
-            map.addControl(new MapboxAreaSwitcherControl(config.areaSwitcher.areas), 'top-left');
+            map.addControl(new MapboxAdminBoundaryControl(config.adminBoundary.url), 'top-left');
         });
     };
 
@@ -121,4 +119,4 @@ $(function(){
         }
         hoveredWssId = null;
     });
-})
+})();
