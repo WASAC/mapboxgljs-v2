@@ -35,7 +35,6 @@
   },
   "dependencies": {
     "@mapbox/mapbox-gl-geocoder": "^4.7.0",
-    "@turf/turf": "^5.1.6",
     "@wasac/mapbox-gl-admin-boundary": "git+https://github.com/WASAC/mapbox-gl-admin-boundary.git",
     "@watergis/mapbox-gl-elevation": "^1.0.3",
     "@watergis/mapbox-gl-export": "^1.2.6",
