@@ -34,15 +34,8 @@
     "webpack-dev-server": "^3.11.1"
   },
   "dependencies": {
-    "@mapbox/mapbox-gl-geocoder": "^4.7.0",
-    "@wasac/mapbox-gl-admin-boundary": "git+https://github.com/WASAC/mapbox-gl-admin-boundary.git",
-    "@watergis/mapbox-gl-elevation": "^1.0.3",
-    "@watergis/mapbox-gl-export": "^1.2.6",
-    "@watergis/mapbox-gl-legend": "^1.1.4",
     "@watergis/mapbox-gl-pitch-toggle-control": "^1.0.3",
     "@watergis/mapbox-gl-popup": "^1.0.4",
-    "@watergis/mapbox-gl-style-switcher": "^1.0.11",
-    "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "mapbox-gl": "^2.2.0"
   }
